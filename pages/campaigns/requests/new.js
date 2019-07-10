@@ -12,30 +12,40 @@ class RequestNew extends Component{
     state = {
         value:"",
         description:"",
-        recipient:""
+        recipient:"",
+        loading:false,
+        errorMessage:""
     }
     static async getInitialProps(props){
         const { address } = props.query;
         return { address };
     }
     onSubmit = async(event) => {
+        console.log("check121212121212");
         event.preventDefault();
         const campaign = Campaign(this.props.address);
+        console.log("campaign",campaign);
         const { description,value,recipient } = this.state;
+        console.log("description",description);
+        console.log("value",value);
+        console.log("recipient",recipient);
+        this.setState({loading:true,errorMessage:""});
         try{
             const accounts = await web3.eth.getAccounts();
             await campaign.methods.createRequest(description,web3.utils.toWei(value,'ether'),recipient).send({
                 from:accounts[0]
             });
-
+            Router.pushRoute(`/campaigns/${this.props.address}/requests`);              
         }catch(err){
-
+            this.setState({errorMessage:err.message});
         }
+        this.setState({loading:false});
+
     }
     render(){
         return (
             <Layout>
-            <Form onSubmit={this.onSubmit}>
+            <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
                 <Form.Field>
                     <label>
                         description
@@ -60,11 +70,12 @@ class RequestNew extends Component{
                         recipient
                     </label>
                     <Input value={this.state.recipient} onChange={event => {
-                        this.setState({recipient:event.target.recipient})
+                        this.setState({recipient:event.target.value})
                     }}>
                     </Input>
                 </Form.Field>
-                <Button primary>
+                <Message error header="oops" content={this.state.errorMessage}></Message>
+                <Button primary loading={this.state.loading}>
                     create
                 </Button>
             </Form>
