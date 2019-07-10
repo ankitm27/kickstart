@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 
 import Layout from "./../../components/Layout";
 import Campaign from "./../../ethereum/campaign.js"; 
-import { Card ,Grid} from "semantic-ui-react";
+import { Card ,Grid, Button} from "semantic-ui-react";
 import { throws } from 'assert';
 import web3 from "./../../ethereum/web3.js";
 import ContributeForm from "./../../components/ContributeForm.js";
-
+import { Link } from "./../../routes.js";
 
 class CampaignShow extends Component{
     static async getInitialProps(props){
@@ -64,12 +64,27 @@ class CampaignShow extends Component{
             <Layout>
                 {/* check1212 */}
                 <Grid>
+                    <Grid.Row>
                     <Grid.Column width={10}>
                         {this.renderCard()}
                     </Grid.Column>
                     <Grid.Column width={6}>
                         <ContributeForm address={this.props.address} />
                     </Grid.Column>
+                    </Grid.Row>
+                    
+                    <Grid.Row>
+                    <Grid.Column>
+                    <Link route={`/campaigns/${this.props.address}/requests`}>
+                           <a>
+                               <Button primary>
+                                   view requests
+                               </Button>
+                           </a>
+                        </Link>
+                    </Grid.Column>
+                    </Grid.Row>
+                    
                 </Grid>
                 
             </Layout>
