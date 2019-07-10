@@ -18,7 +18,8 @@ class CampaignShow extends Component{
             balance:summary[1],
             requestsCount:summary[2],
             approversCount:summary[3],
-            manager:summary[4]
+            manager:summary[4],
+            address:props.query.address
         };
     }
 
@@ -61,9 +62,16 @@ class CampaignShow extends Component{
     render(){
         return (
             <Layout>
-                check1212
-                {this.renderCard()}
-                <ContributeForm />
+                {/* check1212 */}
+                <Grid>
+                    <Grid.Column width={10}>
+                        {this.renderCard()}
+                    </Grid.Column>
+                    <Grid.Column width={6}>
+                        <ContributeForm address={this.props.address} />
+                    </Grid.Column>
+                </Grid>
+                
             </Layout>
         )
     }
